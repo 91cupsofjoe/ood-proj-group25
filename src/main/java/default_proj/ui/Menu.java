@@ -68,11 +68,11 @@ public class Menu {
     public static void printParkingEntries(ArrayList<String[]> parking_data) {
         int num_entries = Menu.promptNumEntries(parking_data.size());
         String[] entry, categories = {"date", "fine", "violation",
-                        "plate_id", "state", "ticket_number", "zip_code"};
-        System.out.println("\n================ Parking Entries ================\n");
+                        "plate id", "state", "ticket number", "zip code"};
+        System.out.println("\n================ Parking File Entries ================\n");
         for (int i = 0; i < num_entries; i++) {
             entry = parking_data.get(i);
-            System.out.println("Entry # " + i + ": {");
+            System.out.println("Entry # " + (i + 1) + ": {");
             for (int j = 0; j < categories.length; j++) {
                 System.out.println("\t" + categories[j] + ": " + entry[j]);
             }
@@ -84,7 +84,7 @@ public class Menu {
     public static void printPropertyEntries(ArrayList<String[]> property_data) {
         int num_entries = promptNumEntries(property_data.size() - 1);
         String[] entry, categories = property_data.get(0);
-        System.out.println("\n================ Property Entries ================\n");
+        System.out.println("\n================ Property File Entries ================\n");
         for (int i = 1; i < num_entries + 1; i++) {
             entry = property_data.get(i);
             System.out.println("Entry # " + i + ": {");
