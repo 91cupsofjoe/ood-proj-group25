@@ -1,5 +1,7 @@
 package default_proj.data;
 
+import default_proj.common.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,8 +15,9 @@ import java.util.*;
 public class DataReader {
 
     private static DataReader instance;
-    private final ArrayList<String[]> parking_data, property_data;
-    private final Map<String, Integer> population_map;
+    private final ArrayList<Parking> parking_data;
+    private final ArrayList<Property> property_data;
+    private final Map<Integer, Integer> population_map;
 
     private DataReader(String parking_format, String parking_file,
                        String property_file, String population_file) throws IOException, ParseException {
@@ -41,49 +44,54 @@ public class DataReader {
 
     public static DataReader getInstance() { return instance; }
 
-    public ArrayList<String[]> getParkingData() { return parking_data; }
+    public ArrayList<Parking> getParkingData() { return parking_data; }
 
-    public ArrayList<String[]> getPropertyData() { return property_data; }
+    public ArrayList<Property> getPropertyData() { return property_data; }
 
-    public Map<String, Integer> getPopulationMap() { return population_map; }
+    public Map<Integer, Integer> getPopulationMap() { return population_map; }
 
 
-    private static ArrayList<String[]> parseParkingJSON(FileReader fp) throws IOException, ParseException {
-
-        // The order of this array matches the order of fields in the csv file
-        String[] fields = {"date", "fine", "violation", "plate_id", "state", "ticket_number", "zip_code"};
-
-        ArrayList<String[]> data = new ArrayList<>();
+    private static ArrayList<Parking> parseParkingJSON(FileReader fp) throws IOException, ParseException {
+        ArrayList<Parking> data = new ArrayList<>();
         JSONArray json_arr = (JSONArray) new JSONParser().parse(fp);
         for (Object obj : json_arr) {
             JSONObject json_obj = (JSONObject) obj;
-            String[] entry = new String[fields.length];
-            for (int i = 0; i < fields.length; i++) {
-                entry[i] = json_obj.get(fields[i]).toString();
+            String zip_code = json_obj.get("zip_code").toString();
+            String fine = json_obj.get("fine").toString();
+            if (!zip_code.isEmpty() && !fine.isEmpty()) {
+                data.add(new Parking(zip_code, fine));
             }
-            data.add(entry);
         }
         return data;
     }
 
 
-    private static ArrayList<String[]> parseParkingCSV(FileReader fp) throws IOException {
-        ArrayList<String[]> data = new ArrayList<>();
+    private static ArrayList<Parking> parseParkingCSV(FileReader fp) throws IOException {
+        // The order of this array matches the order of fields in the csv file
+        // String[] fields = {"date", "fine", "violation", "plate_id", "state", "ticket_number", "zip_code"};
+        ArrayList<Parking> data = new ArrayList<>();
         BufferedReader br = new BufferedReader(fp);
             String ln;
             while ((ln = br.readLine()) != null) {
-                data.add(ln.split(","));
+                String[] fields = ln.split(",");
+                if (fields.length == 7) {
+                    String zip_code = fields[6];
+                    String fine = fields[1];
+                    if (!zip_code.isEmpty() && !fine.isEmpty()) {
+                        data.add(new Parking(zip_code, fine));
+                    }
+                }
             }
         return data;
     }
 
 
-    private static ArrayList<String[]> parsePropertiesCSV(FileReader fp) throws IOException {
+    private static ArrayList<Property> parsePropertiesCSV(FileReader fp) throws IOException {
 
         // This array sets the output fields
-        String[] fields = {"market_value", "total_livable_area", "zip_code"};
+        String[] fields = {"zip_code", "market_value", "total_livable_area"};
 
-        ArrayList<String[]> data = new ArrayList<>();
+        ArrayList<Property> data = new ArrayList<>();
         BufferedReader br = new BufferedReader(fp);
         String ln = br.readLine();
         List<String> first_line = Arrays.asList(ln.split(","));
@@ -94,23 +102,28 @@ public class DataReader {
 
         while ((ln = br.readLine()) != null) {
             String[] ln_arr = ln.split(",");
-            String[] entry = new String[index_list.length];
-            for (int i = 0; i < index_list.length; i++) {
-                entry[i] = ln_arr[index_list[i]];
+            String zip_code = ln_arr[index_list[0]].strip(); // Indexes correspond to fields array
+            String market_value = ln_arr[index_list[1]].strip();
+            String livable_area = ln_arr[index_list[2]].strip();
+
+            if (zip_code.length() >= 5) {
+                zip_code = zip_code.substring(0, 5).trim();
+                if (zip_code.length() == 5) {
+                    data.add(new Property(zip_code, market_value, livable_area));
+                }
             }
-            data.add(entry);
         }
         return data;
     }
 
 
-    private static Map<String, Integer> parsePopulationTXT(FileReader fp) throws IOException {
-        Map<String, Integer> pop_map = new HashMap<>();
+    private static Map<Integer, Integer> parsePopulationTXT(FileReader fp) throws IOException {
+        Map<Integer, Integer> pop_map = new HashMap<>();
         BufferedReader br = new BufferedReader(fp);
             String ln;
             while ((ln = br.readLine()) != null) {
                 String[] ln_arr = ln.split(" ");
-                pop_map.put(ln_arr[0], Integer.parseInt(ln_arr[1]));
+                pop_map.put(Integer.parseInt(ln_arr[0]), Integer.parseInt(ln_arr[1]));
             }
         return pop_map;
     }
