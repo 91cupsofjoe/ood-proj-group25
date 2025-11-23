@@ -1,8 +1,8 @@
 package default_proj.common;
 
 public class Property {
-    public int zip_code;
-    public double market_value, livable_area;
+    private final int zip_code;
+    private double market_value, livable_area;
 
     public Property(int zip_code, double market_value, double livable_area) {
         this.zip_code = zip_code;
@@ -23,6 +23,10 @@ public class Property {
             this.livable_area = 0;
         }
     }
+
+    public int zip_code() { return zip_code; }
+    public double market_value() { return market_value; }
+    public double livable_area() { return livable_area; }
 
     @Override
     public String toString() {

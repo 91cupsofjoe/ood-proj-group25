@@ -17,7 +17,7 @@ public class DataReader {
     private static DataReader instance;
     private final ArrayList<Parking> parking_data;
     private final ArrayList<Property> property_data;
-    private final Map<Integer, Integer> population_map;
+    private final ArrayList<Population> population_data;
 
     private DataReader(String parking_format, String parking_file,
                        String property_file, String population_file) throws IOException, ParseException {
@@ -27,7 +27,7 @@ public class DataReader {
             parking_data = parseParkingCSV(new FileReader(parking_file));
         }
         property_data = parsePropertiesCSV(new FileReader(property_file));
-        population_map = parsePopulationTXT(new FileReader(population_file));
+        population_data = parsePopulationTXT(new FileReader(population_file));
     }
 
     public static void init(String parking_format, String parking_file,
@@ -48,7 +48,7 @@ public class DataReader {
 
     public ArrayList<Property> getPropertyData() { return property_data; }
 
-    public Map<Integer, Integer> getPopulationMap() { return population_map; }
+    public ArrayList<Population> getPopulationData() { return population_data; }
 
 
     private static ArrayList<Parking> parseParkingJSON(FileReader fp) throws IOException, ParseException {
@@ -117,15 +117,15 @@ public class DataReader {
     }
 
 
-    private static Map<Integer, Integer> parsePopulationTXT(FileReader fp) throws IOException {
-        Map<Integer, Integer> pop_map = new HashMap<>();
+    private static ArrayList<Population> parsePopulationTXT(FileReader fp) throws IOException {
+        ArrayList<Population> data = new ArrayList<>();
         BufferedReader br = new BufferedReader(fp);
             String ln;
             while ((ln = br.readLine()) != null) {
                 String[] ln_arr = ln.split(" ");
-                pop_map.put(Integer.parseInt(ln_arr[0]), Integer.parseInt(ln_arr[1]));
+                data.add(new Population(ln_arr[0], ln_arr[1]));
             }
-        return pop_map;
+        return data;
     }
 
 }

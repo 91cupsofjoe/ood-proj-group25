@@ -1,7 +1,7 @@
 package default_proj.common;
 
 public class Parking {
-    public int zip_code, fine;
+    private final int zip_code, fine;
 
     public Parking(int zip_code, int fine) {
         this.zip_code = zip_code;
@@ -12,6 +12,9 @@ public class Parking {
         this.zip_code = Integer.parseInt(zip_code);
         this.fine = Integer.parseInt(fine);
     }
+
+    public int zip_code() { return zip_code; }
+    public int fine() { return fine; }
 
     @Override
     public String toString() {
