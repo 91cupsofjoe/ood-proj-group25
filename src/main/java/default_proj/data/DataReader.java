@@ -58,8 +58,9 @@ public class DataReader {
             JSONObject json_obj = (JSONObject) obj;
             String zip_code = json_obj.get("zip_code").toString();
             String fine = json_obj.get("fine").toString();
+            String state = json_obj.get("state").toString();
             if (!zip_code.isEmpty() && !fine.isEmpty()) {
-                data.add(new Parking(zip_code, fine));
+                data.add(new Parking(zip_code, fine, state));
             }
         }
         return data;
@@ -77,8 +78,9 @@ public class DataReader {
                 if (fields.length == 7) {
                     String zip_code = fields[6];
                     String fine = fields[1];
+                    String state = fields[4];
                     if (!zip_code.isEmpty() && !fine.isEmpty()) {
-                        data.add(new Parking(zip_code, fine));
+                        data.add(new Parking(zip_code, fine, state));
                     }
                 }
             }

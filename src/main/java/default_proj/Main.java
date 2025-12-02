@@ -28,6 +28,8 @@ public class Main {
 
             if (selection == 1) {
                 System.out.println(Processor.getTotalPopulation());
+            } else if (selection == 2) {
+                System.out.print(Processor.getFinesPerCapita());
             }
 
         }
