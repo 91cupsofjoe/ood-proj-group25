@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Data files ###
+*.csv
+*.json
+population.txt
