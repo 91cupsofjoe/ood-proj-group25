@@ -1,9 +1,9 @@
 package default_proj;
 
 import default_proj.data.DataReader;
+import default_proj.processor.Processor;
 import default_proj.ui.Menu;
 
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,11 +22,13 @@ public class Main {
 
 
         int selection = -1;
-        while (selection != 0) { // Main Loop
+        while (selection != 0) {
 
             selection = Menu.promptSelection();
-            System.out.println("Selected option: " + selection + "\n");
 
+            if (selection == 1) {
+                System.out.println(Processor.getTotalPopulation());
+            }
 
         }
 
