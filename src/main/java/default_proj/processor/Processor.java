@@ -52,5 +52,25 @@ public class Processor {
         return result.toString();
     }
 
+    public static int getAverageMarketValue(int zipCode) {
+        ArrayList<Property> propertyData = DataReader.getInstance().getPropertyData();
+        double totalValue = 0;
+        int count = 0;
+        for (Property p : propertyData) {
+            if (p.zip_code() != zipCode) {
+                continue;
+            }
+            if (p.market_value() <= 0) {
+                continue;
+            }
+            totalValue += p.market_value();
+            count++;
+        }
+        if (count == 0) {
+            return 0;
+        }
+        return (int) Math.round(totalValue / count);
+    }
+
 }
 

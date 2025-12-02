@@ -30,6 +30,9 @@ public class Main {
                 System.out.println(Processor.getTotalPopulation());
             } else if (selection == 2) {
                 System.out.print(Processor.getFinesPerCapita());
+            } else if (selection == 3) {
+                int zip = Menu.promptZipCode();
+                System.out.println(Processor.getAverageMarketValue(zip));
             }
 
         }
