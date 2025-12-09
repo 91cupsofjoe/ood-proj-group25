@@ -30,6 +30,12 @@ public class DataReader {
         population_data = parsePopulationTXT(new FileReader(population_file));
     }
 
+    protected DataReader() {
+        this.parking_data = new ArrayList<>();
+        this.property_data = new ArrayList<>();
+        this.population_data = new ArrayList<>();
+    }
+
     public static void init(String parking_format, String parking_file,
                             String property_file, String population_file) {
         if (instance == null) {
@@ -43,6 +49,10 @@ public class DataReader {
     }
 
     public static DataReader getInstance() { return instance; }
+
+    public static void setInstanceForTesting(DataReader testInstance) {
+        instance = testInstance;
+    }
 
     public ArrayList<Parking> getParkingData() { return parking_data; }
 

@@ -11,6 +11,10 @@ public class Processor {
 
     private static final Map<Integer, Integer> marketValueCache = new HashMap<>();
 
+    public static void clearCacheForTesting() {
+        marketValueCache.clear();
+    }
+
     public static int getTotalPopulation() {
         return DataReader.getInstance().getPopulationData()
                 .stream()
