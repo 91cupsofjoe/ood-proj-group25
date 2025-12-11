@@ -1,7 +1,7 @@
 package default_proj;
 
 import default_proj.data.DataReader;
-import default_proj.processor.Processor;
+// import default_proj.processor.Processor; Processor is a static class
 import default_proj.ui.Menu;
 
 
@@ -16,40 +16,28 @@ public class Main {
             System.err.println("Parking format must be 'csv' or 'json'");
             return;
         }
+        
         DataReader.init(args[0], args[1], args[2], args[3]);
         DataReader dr = DataReader.getInstance();
         if (dr == null) { return; }
-
-
-        int selection = -1;
-        while (selection != 0) {
-
-            selection = Menu.promptSelection();
-
-            if (selection == 1) {
-                System.out.println(Processor.getTotalPopulation());
-            } else if (selection == 2) {
-                System.out.print(Processor.getFinesPerCapita());
-            } else if (selection == 3) {
-                int zip = Menu.promptZipCode();
-                System.out.println(Processor.getAverageMarketValue(zip));
-            } else if (selection == 4) {
-                int zip = Menu.promptZipCode();
-                System.out.println(Processor.getAverageLivableArea(zip));
-            } else if (selection == 5) {
-                int zip = Menu.promptZipCode();
-                System.out.println(Processor.getMarketValuePerCapita(zip));
-            } else if (selection == 6) {
-                int zip = Menu.promptZipCode();
-                System.out.println(Processor.getLivableAreaPerCapita(zip));
-            } else if (selection == 7) {
-                int zip = Menu.promptZipCode();
-                System.out.println(Processor.getAverageValuePerSqFt(zip));
-            }
-
-        }
-
-
+        
+        // This will initialize the menu and its interactive GUI
+        Menu menu = Menu.getMenu(true);
     }
 
+    public static Menu getMenuForTesting(String data_dir) {
+        String[] args = new String[]{
+            "json",
+            data_dir + "parking.json",
+            data_dir + "properties.csv",
+            data_dir + "population.txt"
+        };
+
+        DataReader.init(args[0], args[1], args[2], args[3]);
+        DataReader dr = DataReader.getInstance();
+        if (dr == null) { return null; }
+        
+        // This will not initialize the menu and its interactive GUI
+        return Menu.getMenu(false);
+    }
 }
