@@ -63,7 +63,7 @@ public class MenuTest {
     }
 
     // Testing Menu.getResultsFromSearch():
-    // Testing empty input for the String option 
+    // Testing empty input for the String option
     @Test
     public void testEmptyOption() {
         // Create option and random input Strings
